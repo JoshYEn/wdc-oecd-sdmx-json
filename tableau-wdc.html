@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+	<title>WDC-SDMX-JSON Tool for OECD Data</title>
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<link rel="icon" type="image/x-icon" href="https://tableau.github.io/webdataconnector/assets/logo.png" />
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" type="text/javascript"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!-- Tableau JS -->
+	<script src="https://connectors.tableau.com/libs/tableauwdc-2.3.latest.js" type="text/javascript"></script>
+	<script src="/assets/WDC_FetchData.js" type="text/javascript"></script>
+
+	<style>
+		html,
+		body {
+			overflow-x: hidden;
+			/* Prevent scroll on narrow devices */
+		}
+
+		@media (max-width: 991.98px) {
+			.offcanvas-collapse {
+				position: fixed;
+				top: 56px;
+				/* Height of navbar */
+				bottom: 0;
+				left: 100%;
+				width: 100%;
+				padding-right: 1rem;
+				padding-left: 1rem;
+				overflow-y: auto;
+				visibility: hidden;
+				background-color: #343a40;
+				transition: visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+				transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+				transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+			}
+
+			.offcanvas-collapse.open {
+				visibility: visible;
+				-webkit-transform: translateX(-100%);
+				transform: translateX(-100%);
+			}
+		}
+
+		.text-white-50 {
+			color: rgba(255, 255, 255, .5);
+		}
+
+		.bg-blue {
+			background-color: #0b52a8;
+		}
+
+		.lh-100 {
+			line-height: 1;
+		}
+
+		.lh-125 {
+			line-height: 1.25;
+		}
+
+		.lh-150 {
+			line-height: 1.5;
+		}
+
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+	</style>
+</head>
+
+<body class="bg-light">
+	<main role="main" class="container">
+		<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-blue rounded shadow-sm">
+			<img class="mr-3" src="https://tableau.github.io/webdataconnector/assets/logo.png" alt="" width="48"
+				height="48">
+			<div class="lh-100">
+				<h6 class="mb-2 text-white lh-100">Get OECD Greenhouse Emissions Data</h6>
+				<small>Powered by Web Data Connector & Tableau</small>
+			</div>
+		</div>
+
+		<!-- Year Select -->
+		<div class="my-3 p-3 bg-white rounded shadow-sm">
+			<h6 class="border-bottom border-gray pb-2 mb-0">Specify time range</h6>
+			<div class="text-muted pt-2">
+				<form class="mb-0">
+					<div class="form-row media-body mb-0 small lh-125">
+						<div class="col-md-4">
+							<label for="start-year" class="text-center">Start Year</label>
+							<input type="text" class="form-control form-control-sm" id="start-year" value="1990">
+						</div>
+						<div class="col-md-4">
+							<label for="end-year" class="text-center">End Year</label>
+							<input type="text" class="form-control form-control-sm" id="end-year" value="2017">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div> <!-- Year Select -->
+
+
+		<!-- Data Select -->
+		<div class="my-3 p-3 bg-white rounded shadow-sm">
+			<h6 class="border-bottom border-gray pb-2 mb-0">Specify data selection</h6>
+			<div class="row text-muted pt-2">
+				<div class="col-md-6">
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input" disabled id="countrySelection">
+						<label class="custom-control-label" for="countrySelection">Exclude useless countries</label>
+					</div>
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input" disabled id="polluteSelection">
+						<label class="custom-control-label" for="polluteSelection">Exclude useless pollutants</label>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input" id="variablSelection" checked>
+						<label class="custom-control-label" for="variablSelection">Exclude useless variables</label>
+					</div>
+				</div>
+			</div>
+			<!-- <p class="small pt-2 mb-0" style="color: red;"><b>TODO:</b> This data selection is not functioning yet.</p> -->
+		</div> <!-- Data Select -->
+
+		<div class="row justify-content-center">
+			<div class="text-center col-md-12">
+				<div class="alert alert-primary mb-0 shadow-sm" role="alert">
+					Check this new version!
+				</div>
+			</div>
+		</div>
+
+		<div class="row justify-content-center my-3">
+			<div class="text-center">
+				<button type="button" id="submitButton" class="btn btn-success">Get Data!</button>
+				<div id="errorMsg"></div>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>
